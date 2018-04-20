@@ -20,6 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.net.UnknownServiceException;
 import java.util.List;
+import java.util.Objects;
 
 import javax.net.ssl.SSLHandshakeException;
 
@@ -61,6 +62,7 @@ public class MediathekListFragment extends Fragment implements MediathekItemAdap
 	private MediathekShow longClickShow;
 	private MediathekRepository mediathekRepository;
 	private Disposable getShowsCall;
+	private MediathekListFilterFragment filter;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -106,6 +108,8 @@ public class MediathekListFragment extends Fragment implements MediathekItemAdap
 		adapter = new MediathekItemAdapter(MediathekListFragment.this);
 		recyclerView.setAdapter(adapter);
 
+		filter = (MediathekListFilterFragment) getChildFragmentManager().findFragmentById(R.id.fragment_filter);
+
 		loadItems(0, true);
 
 		return view;
@@ -127,8 +131,19 @@ public class MediathekListFragment extends Fragment implements MediathekItemAdap
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		MenuItem filterMenuItem = menu.findItem(R.id.menu_filter);
+		filterMenuItem.setIcon(filter.getMenuIconResId());
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.menu_filter:
+				filter.toggle();
+				Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
+				return true;
 			case R.id.menu_refresh:
 				onRefresh();
 				return true;
