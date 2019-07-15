@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import de.christinecoenen.code.zapp.model.ChannelModel;
 
 
@@ -19,10 +21,12 @@ public class PreferenceChannelOrderHelper {
 
 	private static final String PREF_KEY_CHANNEL_ORDER = "PREF_KEY_CHANNEL_ORDER";
 
-	private final PreferenceHelper preferenceHelper;
+	@Inject
+	PreferenceHelper preferenceHelper;
 
+	@Inject
 	public PreferenceChannelOrderHelper (Context context) {
-		preferenceHelper = new PreferenceHelper(context);
+
 	}
 
 	public void saveChannelOrder(List<ChannelModel> channels) {

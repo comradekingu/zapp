@@ -11,6 +11,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 class PreferenceHelper {
 
 	private static final String SHARED_PEFERENCES_NAME = "ZAPP_SHARED_PREFERENCES";
@@ -18,6 +20,7 @@ class PreferenceHelper {
 	private final Gson gson = new Gson();
 	private final SharedPreferences preferences;
 
+	@Inject
 	PreferenceHelper(Context context) {
 		preferences = context.getSharedPreferences(SHARED_PEFERENCES_NAME, Context.MODE_PRIVATE);
 	}

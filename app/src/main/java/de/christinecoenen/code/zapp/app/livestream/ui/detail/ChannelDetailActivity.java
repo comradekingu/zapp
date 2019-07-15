@@ -21,10 +21,13 @@ import android.widget.ProgressBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import javax.inject.Inject;
+
 import butterknife.BindDrawable;
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.OnTouch;
+import dagger.android.AndroidInjection;
 import de.christinecoenen.code.zapp.R;
 import de.christinecoenen.code.zapp.app.livestream.ui.views.ProgramInfoViewBase;
 import de.christinecoenen.code.zapp.app.player.BackgroundPlayerService;
@@ -74,11 +77,13 @@ public class ChannelDetailActivity extends FullscreenActivity implements StreamP
 	@BindInt(R.integer.activity_channel_detail_play_stream_delay_millis)
 	protected int playStreamDelayMillis;
 
+	@Inject
+	IChannelList channelList;
+
 	private final Handler playHandler = new Handler();
 	private ChannelDetailAdapter channelDetailAdapter;
 	private ChannelModel currentChannel;
 	private Window window;
-	private IChannelList channelList;
 	private Player player;
 	private BackgroundPlayerService.Binder binder;
 	private SettingsRepository settings;
@@ -151,6 +156,8 @@ public class ChannelDetailActivity extends FullscreenActivity implements StreamP
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		AndroidInjection.inject(this);
+
 		super.onCreate(savedInstanceState);
 
 		setSupportActionBar(toolbar);
@@ -160,7 +167,6 @@ public class ChannelDetailActivity extends FullscreenActivity implements StreamP
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
-		channelList = new SortableJsonChannelList(this);
 		settings = new SettingsRepository(this);
 
 		// pager

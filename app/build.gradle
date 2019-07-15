@@ -81,6 +81,12 @@ dependencies {
 	implementation 'androidx.recyclerview:recyclerview:1.0.0'
 	implementation 'androidx.preference:preference:1.0.0'
 
+	// dependency injection
+	api 'com.google.dagger:dagger-android:2.23'
+	api 'com.google.dagger:dagger-android-support:2.23'
+	annotationProcessor 'com.google.dagger:dagger-android-processor:2.23'
+	annotationProcessor 'com.google.dagger:dagger-compiler:2.23.2'
+
 	// helper
 	implementation 'com.google.code.gson:gson:2.8.5'
 	implementation 'commons-io:commons-io:2.6'

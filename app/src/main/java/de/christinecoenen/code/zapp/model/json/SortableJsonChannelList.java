@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import de.christinecoenen.code.zapp.model.ChannelModel;
 import de.christinecoenen.code.zapp.model.IChannelList;
 import de.christinecoenen.code.zapp.model.ISortableChannelList;
@@ -16,10 +18,12 @@ import de.christinecoenen.code.zapp.app.settings.helper.PreferenceChannelOrderHe
 public class SortableJsonChannelList implements ISortableChannelList {
 
 	private IChannelList channelList;
-	private final PreferenceChannelOrderHelper channelOrderHelper;
 
+	@Inject
+	PreferenceChannelOrderHelper channelOrderHelper;
+
+	@Inject
 	public SortableJsonChannelList(Context context) {
-		channelOrderHelper = new PreferenceChannelOrderHelper(context);
 		channelList = new JsonChannelList(context);
 		loadSortingFromDisk();
 	}
