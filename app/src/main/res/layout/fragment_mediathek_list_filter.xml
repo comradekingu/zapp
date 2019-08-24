@@ -1,80 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_marginBottom="@dimen/cardview_default_elevation"
 	android:visibility="gone"
-	app:contentPadding="@dimen/activity_vertical_margin"
 	tools:showIn="@layout/fragment_mediathek_list"
 	tools:visibility="visible">
 
-	<androidx.constraintlayout.widget.ConstraintLayout
+	<HorizontalScrollView
+		android:id="@+id/channel_scroller"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:scrollbars="none">
 
-		<androidx.constraintlayout.widget.Barrier
-			android:id="@+id/barrier_labels_end"
+		<LinearLayout
+			android:id="@+id/container_channel_buttons"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			app:barrierDirection="end"
-			app:constraint_referenced_ids="label_duration,label_channels" />
+			android:orientation="horizontal"
+			android:padding="8dp" />
 
-		<TextView
-			android:id="@+id/label_duration"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/fragment_mediathek_filter_duration"
-			app:layout_constraintStart_toStartOf="parent" />
-
-		<SeekBar
-			android:id="@+id/seekbar_duration"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_marginStart="@dimen/activity_horizontal_margin"
-			android:max="300"
-			app:layout_constraintBottom_toBottomOf="@+id/label_duration"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/barrier_labels_end"
-			app:layout_constraintTop_toTopOf="@+id/label_duration" />
-
-		<androidx.constraintlayout.widget.Barrier
-			android:id="@+id/barrier_duration_bottom"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			app:barrierDirection="bottom"
-			app:constraint_referenced_ids="label_duration,seekbar_duration" />
-
-		<TextView
-			android:id="@+id/label_channels"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/fragment_mediathek_filter_channel"
-			app:layout_constraintBottom_toBottomOf="@id/channel_scroller"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="@id/channel_scroller" />
-
-		<HorizontalScrollView
-			android:id="@+id/channel_scroller"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_marginStart="@dimen/activity_horizontal_margin"
-			android:layout_marginTop="8dp"
-			android:scrollbars="none"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/barrier_labels_end"
-			app:layout_constraintTop_toBottomOf="@id/barrier_duration_bottom">
-
-			<LinearLayout
-				android:id="@+id/container_channel_buttons"
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:orientation="horizontal" />
-
-		</HorizontalScrollView>
-
-	</androidx.constraintlayout.widget.ConstraintLayout>
+	</HorizontalScrollView>
 
 </androidx.cardview.widget.CardView>

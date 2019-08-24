@@ -30,7 +30,7 @@ public class MediathekListFilterFragment extends Fragment {
 	protected String[] channelNames;
 
 	@BindView(R.id.container_channel_buttons)
-	protected LinearLayout channelButtonContainer;
+	protected ViewGroup channelButtonContainer;
 
 
 	private Listener listener;
