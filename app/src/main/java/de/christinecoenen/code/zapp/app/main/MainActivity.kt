@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import de.christinecoenen.code.zapp.R
@@ -20,7 +19,7 @@ import de.christinecoenen.code.zapp.databinding.ActivityMainBinding
 import de.christinecoenen.code.zapp.utils.system.MenuHelper
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity() {
 
 	private val viewModel: MainViewModel by viewModel()
 
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 		})
 
 		val searchManager = getSystemService(SEARCH_SERVICE) as SearchManager
-		binding.search.setOnQueryTextListener(this)
 		binding.search.setIconifiedByDefault(false)
 		binding.search.setSearchableInfo(searchManager.getSearchableInfo(componentName))
 		binding.search.clearFocus()
@@ -123,10 +121,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 			// called by searchView on search commit
 			val query = intent.getStringExtra(SearchManager.QUERY)
 
-			binding.search.setOnQueryTextListener(null)
 			binding.search.clearFocus()
 			binding.search.setQuery(query, false)
-			binding.search.setOnQueryTextListener(this)
 
 			search(query)
 
@@ -161,15 +157,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 				imm.showSoftInput(searchView.findFocus(), InputMethodManager.SHOW_FORCED)
 			}
 		}
-	}
-
-	override fun onQueryTextSubmit(query: String): Boolean {
-		return false
-	}
-
-	override fun onQueryTextChange(newText: String): Boolean {
-		search(newText)
-		return true
 	}
 
 	companion object {
