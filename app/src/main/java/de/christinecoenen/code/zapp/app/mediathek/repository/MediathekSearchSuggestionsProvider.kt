@@ -4,26 +4,30 @@ import android.content.Context
 import android.content.SearchRecentSuggestionsProvider
 import android.provider.SearchRecentSuggestions
 
-class MediathekSearchSuggestionsProvider : SearchRecentSuggestionsProvider() {
+class MediathekSearchSuggestionsProvider(
+	private val applicationContext: Context? = null
+) : SearchRecentSuggestionsProvider() {
 
 	companion object {
 
 		private const val AUTHORITY = "de.christinecoenen.code.zapp.MediathekSearchSuggestionsProvider"
 		private const val MODE = DATABASE_MODE_QUERIES
-
-		fun saveQuery(context: Context, query: String) {
-			val suggestions = SearchRecentSuggestions(context, AUTHORITY, MODE)
-			suggestions.saveRecentQuery(query, null)
-		}
-
-		@JvmStatic
-		fun deleteAllQueries(context: Context) {
-			val suggestions = SearchRecentSuggestions(context, AUTHORITY, MODE)
-			suggestions.clearHistory()
-		}
 	}
+
+	@Suppress("unused")
+	constructor() : this(null)
 
 	init {
 		setupSuggestions(AUTHORITY, MODE)
+	}
+
+	fun saveQuery(query: String) {
+		val suggestions = SearchRecentSuggestions(applicationContext ?: context, AUTHORITY, MODE)
+		suggestions.saveRecentQuery(query, null)
+	}
+
+	fun deleteAllQueries() {
+		val suggestions = SearchRecentSuggestions(applicationContext ?: context, AUTHORITY, MODE)
+		suggestions.clearHistory()
 	}
 }

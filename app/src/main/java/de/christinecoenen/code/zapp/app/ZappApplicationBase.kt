@@ -8,6 +8,7 @@ import de.christinecoenen.code.zapp.app.livestream.ui.detail.ChannelDetailActivi
 import de.christinecoenen.code.zapp.app.main.MainViewModel
 import de.christinecoenen.code.zapp.app.mediathek.api.MediathekApi
 import de.christinecoenen.code.zapp.app.mediathek.controller.downloads.DownloadController
+import de.christinecoenen.code.zapp.app.mediathek.repository.MediathekSearchSuggestionsProvider
 import de.christinecoenen.code.zapp.app.player.IPlaybackPositionRepository
 import de.christinecoenen.code.zapp.app.player.PersistedPlaybackPositionRepository
 import de.christinecoenen.code.zapp.app.player.Player
@@ -105,8 +106,9 @@ abstract class ZappApplicationBase : Application() {
 			factory { SettingsRepository(androidContext()) }
 			factory { Player(androidContext(), get()) }
 			factory { JsonChannelList(androidContext()) }
+			factory { MediathekSearchSuggestionsProvider(androidContext()) }
 
-			viewModel { MainViewModel(androidApplication()) }
+			viewModel { MainViewModel(androidApplication(), get()) }
 			viewModel { ChannelDetailActivityViewModel(get(), get()) }
 			viewModel { DownloadsViewModel(get()) }
 		}

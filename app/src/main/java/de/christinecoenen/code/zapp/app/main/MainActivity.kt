@@ -12,7 +12,6 @@ import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import de.christinecoenen.code.zapp.R
 import de.christinecoenen.code.zapp.app.about.ui.AboutActivity
-import de.christinecoenen.code.zapp.app.mediathek.repository.MediathekSearchSuggestionsProvider
 import de.christinecoenen.code.zapp.app.mediathek.ui.list.MediathekListFragment
 import de.christinecoenen.code.zapp.app.settings.ui.SettingsActivity
 import de.christinecoenen.code.zapp.databinding.ActivityMainBinding
@@ -25,8 +24,6 @@ class MainActivity : AppCompatActivity() {
 
 	private var _binding: ActivityMainBinding? = null
 	private val binding get() = _binding!!
-
-	private var searchQuery: String? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -54,6 +51,8 @@ class MainActivity : AppCompatActivity() {
 		binding.search.clearFocus()
 		binding.search.setOnQueryTextFocusChangeListener(::onSearchQueryTextFocusChangeListener)
 
+		viewModel.searchQuery.observe(this, ::onSearchQuerySubmitted)
+
 		binding.bottomNavigation.setOnNavigationItemSelectedListener(::onNavigationItemSelected)
 		onPageSelected(binding.viewPager.currentItem)
 		handleIntent(intent)
@@ -67,18 +66,6 @@ class MainActivity : AppCompatActivity() {
 	override fun onNewIntent(intent: Intent) {
 		super.onNewIntent(intent)
 		handleIntent(intent)
-	}
-
-	override fun onSaveInstanceState(outState: Bundle) {
-		super.onSaveInstanceState(outState)
-		outState.putString(ARG_QUERY, searchQuery)
-	}
-
-	override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-		super.onRestoreInstanceState(savedInstanceState)
-
-		searchQuery = savedInstanceState.getString(ARG_QUERY)
-		search(searchQuery)
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -124,15 +111,11 @@ class MainActivity : AppCompatActivity() {
 			binding.search.clearFocus()
 			binding.search.setQuery(query, false)
 
-			search(query)
-
-			MediathekSearchSuggestionsProvider.saveQuery(this, query)
+			viewModel.submitSearchQuery(query)
 		}
 	}
 
-	private fun search(query: String?) {
-		searchQuery = query
-
+	private fun onSearchQuerySubmitted(query: String?) {
 		val currentFragment = supportFragmentManager
 			.findFragmentByTag("f" + binding.viewPager.currentItem)
 
@@ -157,9 +140,5 @@ class MainActivity : AppCompatActivity() {
 				imm.showSoftInput(searchView.findFocus(), InputMethodManager.SHOW_FORCED)
 			}
 		}
-	}
-
-	companion object {
-		private const val ARG_QUERY = "ARG_QUERY"
 	}
 }

@@ -2,7 +2,8 @@ package de.christinecoenen.code.zapp.app.settings.ui
 
 import android.os.Bundle
 import androidx.preference.PreferenceDialogFragmentCompat
-import de.christinecoenen.code.zapp.app.mediathek.repository.MediathekSearchSuggestionsProvider.Companion.deleteAllQueries
+import de.christinecoenen.code.zapp.app.mediathek.repository.MediathekSearchSuggestionsProvider
+import org.koin.android.ext.android.inject
 
 class DeleteSearchQueriesPreferenceDialog : PreferenceDialogFragmentCompat() {
 
@@ -18,9 +19,11 @@ class DeleteSearchQueriesPreferenceDialog : PreferenceDialogFragmentCompat() {
 
 	}
 
+	private val mediathekSearchSuggestionsProvider: MediathekSearchSuggestionsProvider by inject()
+
 	override fun onDialogClosed(positiveResult: Boolean) {
 		if (positiveResult) {
-			deleteAllQueries(requireContext())
+			mediathekSearchSuggestionsProvider.deleteAllQueries()
 		}
 	}
 }
