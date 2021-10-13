@@ -135,7 +135,7 @@ internal class DownloadFileInfoManager(
 			put(MediaStore.Video.Media.CATEGORY, mediathekShow.channel)
 			put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/Zapp")
 			put(MediaStore.Video.Media.MIME_TYPE, "video/mp4")
-			put(MediaStore.Video.Media.IS_PENDING, 1)
+			//put(MediaStore.Video.Media.IS_PENDING, 1)
 		}
 
 		val resolver = applicationContext.contentResolver
