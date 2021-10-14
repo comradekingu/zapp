@@ -20,7 +20,7 @@ class FileDownloader(
 	 * @param filePath either file scheme url or content scheme url for the file to download to
 	 */
 	fun download(downloadUrl: String, filePath: String) {
-		Timber.d("Download started: %s", downloadUrl)
+		Timber.d("Download started: %s to %s", downloadUrl, filePath)
 
 		val request = Request.Builder().url(downloadUrl).build()
 
