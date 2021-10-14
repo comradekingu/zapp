@@ -65,6 +65,7 @@ class ZappDownloadController(
 
 		downloadFileInfoManager.markFileAsDownloaded(filePath)
 
+		mediathekRepository.updateDownloadedVideoPath(downloadId, filePath)
 		mediathekRepository.updateDownloadProgress(downloadId, 100)
 		mediathekRepository.updateDownloadStatus(downloadId, DownloadStatus.COMPLETED)
 	}
