@@ -34,7 +34,7 @@ class ZappDownloadController(
 			mediathekRepository.updateShow(show)
 
 			// TODO: check network conditions
-			download(downloadUrl, filePath)
+			download(show.downloadId, downloadUrl, filePath)
 		}
 
 	override fun stopDownload(persistedShowId: Int) {
@@ -57,13 +57,14 @@ class ZappDownloadController(
 		return mediathekRepository.getDownloadProgress(persistedShowId)
 	}
 
-	private fun download(downloadUrl: String, filePath: String) {
-		// TODO: set download status to running in repository
+	private suspend fun download(downloadId: Int, downloadUrl: String, filePath: String) {
+		mediathekRepository.updateDownloadStatus(downloadId, DownloadStatus.DOWNLOADING)
 
 		// TODO: write progress to repository
 		fileDownloader.download(downloadUrl, filePath)
 
 		// TODO: set MediaStore.Video.Media.IS_PENDING to 0 in content provider
-		// TODO: set download status to success in repository
+		mediathekRepository.updateDownloadProgress(downloadId, 100)
+		mediathekRepository.updateDownloadStatus(downloadId, DownloadStatus.COMPLETED)
 	}
 }
