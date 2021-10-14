@@ -17,7 +17,7 @@ import org.apache.commons.io.FileUtils
 import java.io.File
 import java.util.*
 
-internal class DownloadFileInfoManager(
+class DownloadFileInfoManager(
 	private val applicationContext: Context,
 	private val settingsRepository: SettingsRepository
 ) {
