@@ -59,12 +59,17 @@ class DownloadFileInfoManager(
 	 * @return A unbuffered [FileOutputStream] of the file at the given path.
 	 */
 	fun getFileOutputStream(filePath: String): FileOutputStream {
-		// TODO: this does only work for content uris - support file uris!
-		val openFileDescriptor =
-			applicationContext.contentResolver.openFileDescriptor(Uri.parse(filePath), "rw")
-				?: throw FileNotFoundException("Could not open file descriptor for $filePath")
 
-		return FileOutputStream(openFileDescriptor.fileDescriptor)
+		return if (filePath.startsWith("content:")) {
+			val openFileDescriptor =
+				applicationContext.contentResolver.openFileDescriptor(Uri.parse(filePath), "rw")
+					?: throw FileNotFoundException("Could not open file descriptor for $filePath")
+
+			FileOutputStream(openFileDescriptor.fileDescriptor)
+
+		} else {
+			File(filePath).outputStream()
+		}
 	}
 
 	/**
@@ -74,7 +79,11 @@ class DownloadFileInfoManager(
 	 * @param filePath Path of a download file previously obtained via [getDownloadFilePath].
 	 */
 	fun markFileAsDownloaded(filePath: String) {
-		// TODO: this does only work for content uris - support file uris!
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || !filePath.startsWith("content:")) {
+			// only content uris from media store need to be marked as downloaded
+			return
+		}
+
 		val videoContentValues = ContentValues().apply {
 			// we have to update at least one value besides IS_PENDING
 			put(MediaStore.Video.Media.IS_PRIVATE, false)
