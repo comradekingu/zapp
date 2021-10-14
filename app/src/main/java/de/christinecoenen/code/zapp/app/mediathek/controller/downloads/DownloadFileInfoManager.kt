@@ -61,10 +61,31 @@ class DownloadFileInfoManager(
 	fun getFileOutputStream(filePath: String): FileOutputStream {
 		// TODO: this does only work for content uris - support file uris!
 		val openFileDescriptor =
-			applicationContext.contentResolver.openFileDescriptor(Uri.parse(filePath), "w")
+			applicationContext.contentResolver.openFileDescriptor(Uri.parse(filePath), "rw")
 				?: throw FileNotFoundException("Could not open file descriptor for $filePath")
 
 		return FileOutputStream(openFileDescriptor.fileDescriptor)
+	}
+
+	/**
+	 * Marks the given file as fully downloaded if needed.
+	 * Neeeded for videos in MediaStore.
+	 *
+	 * @param filePath Path of a download file previously obtained via [getDownloadFilePath].
+	 */
+	fun markFileAsDownloaded(filePath: String) {
+		// TODO: this does only work for content uris - support file uris!
+		val videoContentValues = ContentValues().apply {
+			// we have to update at least one value besides IS_PENDING
+			put(MediaStore.Video.Media.IS_PRIVATE, false)
+			put(MediaStore.Video.Media.IS_PENDING, 0)
+		}
+		applicationContext.contentResolver.update(
+			Uri.parse(filePath),
+			videoContentValues,
+			null,
+			null
+		)
 	}
 
 	fun updateDownloadFileInMediaCollection(download: Download) {
@@ -159,7 +180,7 @@ class DownloadFileInfoManager(
 			put(MediaStore.Video.Media.CATEGORY, mediathekShow.channel)
 			put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/Zapp")
 			put(MediaStore.Video.Media.MIME_TYPE, "video/mp4")
-			//put(MediaStore.Video.Media.IS_PENDING, 1)
+			put(MediaStore.Video.Media.IS_PENDING, 1)
 		}
 
 		val resolver = applicationContext.contentResolver

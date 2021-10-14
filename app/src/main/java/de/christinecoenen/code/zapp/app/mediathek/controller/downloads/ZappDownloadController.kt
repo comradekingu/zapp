@@ -63,7 +63,8 @@ class ZappDownloadController(
 		// TODO: write progress to repository
 		fileDownloader.download(downloadUrl, filePath)
 
-		// TODO: set MediaStore.Video.Media.IS_PENDING to 0 in content provider
+		downloadFileInfoManager.markFileAsDownloaded(filePath)
+
 		mediathekRepository.updateDownloadProgress(downloadId, 100)
 		mediathekRepository.updateDownloadStatus(downloadId, DownloadStatus.COMPLETED)
 	}
