@@ -1,7 +1,6 @@
 package de.christinecoenen.code.zapp.app.main
 
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -10,6 +9,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import androidx.preference.PreferenceManager
+import com.google.android.material.appbar.AppBarLayout
 import de.christinecoenen.code.zapp.R
 import de.christinecoenen.code.zapp.databinding.ActivityMainBinding
 
@@ -68,7 +68,18 @@ class MainActivity : AppCompatActivity() {
 		} else {
 			binding.toolbar.logo = null
 			binding.toolbar.titleMarginStart = 0
+			binding.appBar.isLiftOnScroll = false
 		}
+
+		// lift toolbar on scroll for main destinations
+		(binding.collapsingToolbarLayout.layoutParams as AppBarLayout.LayoutParams).scrollFlags =
+			if (isMainDestination) {
+				AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
+					AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP or
+					AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+			} else {
+				AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL
+			}
 	}
 
 	override fun onDestroy() {
